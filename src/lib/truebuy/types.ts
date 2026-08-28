@@ -23,19 +23,19 @@ export interface Product {
   typicalPrice: number;
   fairPriceLow: number;
   fairPriceHigh: number;
-  refurbPrice?: number;
-  usedPrice?: number;
+  refurbPrice?: number | undefined;
+  usedPrice?: number | undefined;
   /** Rental cost per single use, if the category is commonly rented */
-  rentPerUse?: number;
+  rentPerUse?: number | undefined;
   /** Typical repair cost for an existing unit of this category */
-  repairCost?: number;
+  repairCost?: number | undefined;
   /** Expected resale value after 1 year of ownership */
   resaleAfter1Year: number;
   lifetimeYears: number;
   /** Newer version expected in the next weeks? */
-  refreshSoon?: boolean;
+  refreshSoon?: boolean | undefined;
   discountFrequency: "low" | "medium" | "high";
-  offerText?: string;
+  offerText?: string | undefined;
   envImpactNew: "Low" | "Medium" | "High";
   emoji: string;
   specs: string[];
@@ -50,9 +50,9 @@ export interface PurchaseContext {
   /** User owns a similar product that is broken / degraded */
   ownsBroken: boolean;
   /** Resale value of the owned equivalent (INR, estimated) */
-  ownedResaleValue?: number;
+  ownedResaleValue?: number | undefined;
   /** Only needed for a limited number of months */
-  neededMonths?: number;
+  neededMonths?: number | undefined;
   researchedBefore: boolean;
   urgencyMarketing: boolean;
 }
@@ -114,5 +114,5 @@ export interface AnalysisResult {
   emi: { monthly: number; months: number; total: number; extra: number };
   pressureFlags: string[];
   headline: string;
-  aiSummary?: string;
+  aiSummary?: string | undefined;
 }

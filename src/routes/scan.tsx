@@ -13,6 +13,8 @@ import {
 import { useRef, useState } from "react";
 import { Card, Estimated, Screen, SectionTitle } from "@/components/truebuy/ui";
 import { DEMO_PRODUCTS, findDemoProduct } from "@/lib/truebuy/data";
+
+const FIRST = DEMO_PRODUCTS[0]!;
 import { setDraft, type Draft } from "@/lib/truebuy/draft";
 import { detectPressure, inr } from "@/lib/truebuy/engine";
 import type { Product } from "@/lib/truebuy/types";
@@ -23,9 +25,9 @@ type Mode = "camera" | "link" | "voice" | "screenshot" | "manual";
 export const Route = createFileRoute("/scan")({
   validateSearch: (search: Record<string, unknown>): { mode: Mode } => ({
     mode: (["camera", "link", "voice", "screenshot", "manual"] as const).includes(
-      search.mode as Mode,
+      search["mode"] as Mode,
     )
-      ? (search.mode as Mode)
+      ? (search["mode"] as Mode)
       : "camera",
   }),
   head: () => ({
@@ -187,7 +189,7 @@ function Confirm({
 function CameraPanel({ onDone }: { onDone: (d: Draft) => void }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [state, setState] = useState<"idle" | "scanning" | "done">("idle");
-  const [product, setProduct] = useState<Product>(DEMO_PRODUCTS[0]);
+  const [product, setProduct] = useState<Product>(FIRST);
 
   const handleFile = () => {
     setState("scanning");
@@ -262,7 +264,7 @@ function LinkPanel({ onDone }: { onDone: (d: Draft) => void }) {
   const [product, setProduct] = useState<Product | null>(null);
 
   const parse = () => {
-    const match = findDemoProduct(url) ?? DEMO_PRODUCTS[0];
+    const match = findDemoProduct(url) ?? FIRST;
     const price = extractPrice(url);
     setProduct(price ? { ...match, price } : match);
   };
@@ -308,7 +310,7 @@ function ScreenshotPanel({ onDone }: { onDone: (d: Draft) => void }) {
   const [product, setProduct] = useState<Product | null>(null);
 
   const parse = () => {
-    const match = findDemoProduct(offerText) ?? DEMO_PRODUCTS[0];
+    const match = findDemoProduct(offerText) ?? FIRST;
     const price = extractPrice(offerText.split("→").pop() ?? offerText);
     setProduct({ ...match, price: price ?? match.price, offerText });
   };
@@ -361,7 +363,7 @@ function VoicePanel({ onDone }: { onDone: (d: Draft) => void }) {
   const [supported, setSupported] = useState(true);
 
   const parse = (value: string) => {
-    const match = findDemoProduct(value) ?? DEMO_PRODUCTS[0];
+    const match = findDemoProduct(value) ?? FIRST;
     const price = extractPrice(value);
     setProduct(price ? { ...match, price } : match);
   };
@@ -445,7 +447,7 @@ function VoicePanel({ onDone }: { onDone: (d: Draft) => void }) {
 function ManualPanel({ onDone }: { onDone: (d: Draft) => void }) {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
-  const [base, setBase] = useState<Product>(DEMO_PRODUCTS[0]);
+  const [base, setBase] = useState<Product>(FIRST);
 
   const build = (): Product => {
     const p = Number(price) || base.price;

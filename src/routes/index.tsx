@@ -136,7 +136,7 @@ function Action({
   label,
 }: {
   to: "/scan";
-  mode: string;
+  mode: "camera" | "link" | "voice" | "screenshot" | "manual";
   icon: React.ReactNode;
   label: string;
 }) {
