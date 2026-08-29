@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ContextRouteImport } from './routes/context'
 import { Route as HistoryRouteImport } from './routes/history'
 import { Route as InsightsRouteImport } from './routes/insights'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as ScanRouteImport } from './routes/scan'
 import { Route as ResultIdRouteImport } from './routes/result.$id'
 
@@ -36,6 +37,11 @@ const InsightsRoute = InsightsRouteImport.update({
   path: '/insights',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ScanRoute = ScanRouteImport.update({
   id: '/scan',
   path: '/scan',
@@ -52,6 +58,7 @@ export interface FileRoutesByFullPath {
   '/context': typeof ContextRoute
   '/history': typeof HistoryRoute
   '/insights': typeof InsightsRoute
+  '/profile': typeof ProfileRoute
   '/scan': typeof ScanRoute
   '/result/$id': typeof ResultIdRoute
 }
@@ -60,6 +67,7 @@ export interface FileRoutesByTo {
   '/context': typeof ContextRoute
   '/history': typeof HistoryRoute
   '/insights': typeof InsightsRoute
+  '/profile': typeof ProfileRoute
   '/scan': typeof ScanRoute
   '/result/$id': typeof ResultIdRoute
 }
@@ -69,21 +77,36 @@ export interface FileRoutesById {
   '/context': typeof ContextRoute
   '/history': typeof HistoryRoute
   '/insights': typeof InsightsRoute
+  '/profile': typeof ProfileRoute
   '/scan': typeof ScanRoute
   '/result/$id': typeof ResultIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/context' | '/history' | '/insights' | '/scan' | '/result/$id'
+    | '/'
+    | '/context'
+    | '/history'
+    | '/insights'
+    | '/profile'
+    | '/scan'
+    | '/result/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/context' | '/history' | '/insights' | '/scan' | '/result/$id'
+  to:
+    | '/'
+    | '/context'
+    | '/history'
+    | '/insights'
+    | '/profile'
+    | '/scan'
+    | '/result/$id'
   id:
     | '__root__'
     | '/'
     | '/context'
     | '/history'
     | '/insights'
+    | '/profile'
     | '/scan'
     | '/result/$id'
   fileRoutesById: FileRoutesById
@@ -93,6 +116,7 @@ export interface RootRouteChildren {
   ContextRoute: typeof ContextRoute
   HistoryRoute: typeof HistoryRoute
   InsightsRoute: typeof InsightsRoute
+  ProfileRoute: typeof ProfileRoute
   ScanRoute: typeof ScanRoute
   ResultIdRoute: typeof ResultIdRoute
 }
@@ -127,6 +151,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InsightsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/scan': {
       id: '/scan'
       path: '/scan'
@@ -149,6 +180,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContextRoute: ContextRoute,
   HistoryRoute: HistoryRoute,
   InsightsRoute: InsightsRoute,
+  ProfileRoute: ProfileRoute,
   ScanRoute: ScanRoute,
   ResultIdRoute: ResultIdRoute,
 }
