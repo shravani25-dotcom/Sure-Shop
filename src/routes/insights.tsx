@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Leaf, PiggyBank, Repeat, TrendingDown } from "lucide-react";
+import type { ReactNode } from "react";
 import { Card, DecisionPill, Estimated, Screen, SectionTitle } from "@/components/truebuy/ui";
 import { inr } from "@/lib/truebuy/engine";
 import { useDecisions, usePastPurchases, useProfile } from "@/lib/truebuy/store";
@@ -164,7 +165,7 @@ function Tile({
   value,
   hint,
 }: {
-  icon: React.ReactNode;
+  icon: ReactNode;
   label: string;
   value: string;
   hint: string;
