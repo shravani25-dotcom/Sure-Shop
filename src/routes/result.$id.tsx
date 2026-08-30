@@ -18,13 +18,13 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/result/$id")({
   head: () => ({
     meta: [
-      { title: "Your decision — TRUEBUY" },
+      { title: "Your decision — SureShop" },
       {
         name: "description",
         content:
-          "A transparent 0-100 TRUEBUY score with the eight factors behind it, smarter alternatives and the money you save.",
+          "A transparent 0-100 SureShop score with the eight factors behind it, smarter alternatives and the money you save.",
       },
-      { property: "og:title", content: "Your TRUEBUY decision" },
+      { property: "og:title", content: "Your SureShop decision" },
       {
         property: "og:description",
         content: "See the score, the reasoning and the alternatives before you spend.",

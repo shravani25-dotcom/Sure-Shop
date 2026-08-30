@@ -9,7 +9,7 @@ import type {
   PurchaseContext,
 } from "./types";
 
-/** Configurable weights for the TRUEBUY score (must sum to 1). */
+/** Configurable weights for the SureShop score (must sum to 1). */
 export const WEIGHTS = {
   priceValue: 0.2,
   need: 0.2,

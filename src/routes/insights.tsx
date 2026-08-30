@@ -9,16 +9,16 @@ import type { Decision } from "@/lib/truebuy/types";
 export const Route = createFileRoute("/insights")({
   head: () => ({
     meta: [
-      { title: "Spending insights — TRUEBUY" },
+      { title: "Spending insights — SureShop" },
       {
         name: "description",
         content:
           "See your buying patterns: money saved, decision mix, repeat categories and the environmental impact you avoided.",
       },
-      { property: "og:title", content: "Spending insights — TRUEBUY" },
+      { property: "og:title", content: "Spending insights — SureShop" },
       {
         property: "og:description",
-        content: "Patterns, savings and impact from your TRUEBUY decisions.",
+        content: "Patterns, savings and impact from your SureShop decisions.",
       },
     ],
   }),
@@ -60,7 +60,7 @@ function InsightsPage() {
       <header className="tb-rise">
         <h1 className="font-display text-2xl font-extrabold tracking-tighter">Insights</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Patterns TRUEBUY noticed in how you spend.
+          Patterns SureShop noticed in how you spend.
         </p>
       </header>
 

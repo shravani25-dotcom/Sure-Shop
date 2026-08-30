@@ -32,13 +32,13 @@ export const Route = createFileRoute("/scan")({
   }),
   head: () => ({
     meta: [
-      { title: "Scan a product — TRUEBUY" },
+      { title: "Scan a product — SureShop" },
       {
         name: "description",
         content:
-          "Scan a price tag, paste a shopping link, upload a screenshot or ask by voice. TRUEBUY identifies the product before deciding.",
+          "Scan a price tag, paste a shopping link, upload a screenshot or ask by voice. SureShop identifies the product before deciding.",
       },
-      { property: "og:title", content: "Scan a product — TRUEBUY" },
+      { property: "og:title", content: "Scan a product — SureShop" },
       {
         property: "og:description",
         content: "Camera, link, screenshot or voice input for an AI purchase decision.",
@@ -409,7 +409,7 @@ function VoicePanel({ onDone }: { onDone: (d: Draft) => void }) {
           {listening ? <MicOff className="size-9" /> : <Mic className="size-9" />}
         </button>
         <p className="mt-4 text-sm font-semibold">
-          {listening ? "Listening…" : "Ask TRUEBUY out loud"}
+          {listening ? "Listening…" : "Ask SureShop out loud"}
         </p>
         <p className="mt-1 text-[11px] text-muted-foreground">
           “Should I buy this phone for ₹35,000?” · Indian English
@@ -430,7 +430,7 @@ function VoicePanel({ onDone }: { onDone: (d: Draft) => void }) {
           disabled={!text.trim()}
           className="tb-tap active:tb-tap-active mt-3 w-full rounded-2xl bg-primary py-3 font-display text-sm font-bold text-primary-foreground disabled:opacity-40"
         >
-          Ask TRUEBUY
+          Ask SureShop
         </button>
       </Card>
       {product && (
