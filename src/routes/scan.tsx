@@ -186,14 +186,73 @@ function Confirm({
   );
 }
 
+async function downscale(file: File): Promise<{ dataUrl: string; mimeType: string }> {
+  const bitmap = await createImageBitmap(file);
+  const max = 1024;
+  const scale = Math.min(1, max / Math.max(bitmap.width, bitmap.height));
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.round(bitmap.width * scale);
+  canvas.height = Math.round(bitmap.height * scale);
+  canvas.getContext("2d")?.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+  return { dataUrl: canvas.toDataURL("image/jpeg", 0.82), mimeType: "image/jpeg" };
+}
+
+/** Merge what the vision model saw with catalog price priors. */
+function buildFromGuess(guess: VisionGuess): Product {
+  const hint = [guess.label, guess.brand, guess.category, ...guess.specs]
+    .filter(Boolean)
+    .join(" ");
+  const base =
+    findDemoProduct(hint) ??
+    (guess.detectedPrice ? closestByPrice(guess.detectedPrice) : FIRST);
+
+  const price = guess.detectedPrice ?? base.price;
+  const factor = price / base.price;
+  const scale = (n: number) => Math.round(n * factor);
+
+  return {
+    ...base,
+    id: "scan-" + base.id,
+    name: guess.label?.trim() || base.name,
+    brand: guess.brand?.trim() || base.brand,
+    category: guess.category?.trim() || base.category,
+    price,
+    mrp: Math.max(price, scale(base.mrp)),
+    typicalPrice: scale(base.typicalPrice),
+    fairPriceLow: scale(base.fairPriceLow),
+    fairPriceHigh: scale(base.fairPriceHigh),
+    refurbPrice: base.refurbPrice ? scale(base.refurbPrice) : undefined,
+    usedPrice: base.usedPrice ? scale(base.usedPrice) : undefined,
+    resaleAfter1Year: scale(base.resaleAfter1Year),
+    offerText: guess.offerText ?? base.offerText,
+    specs: guess.specs.length ? guess.specs : base.specs,
+  };
+}
+
 function CameraPanel({ onDone }: { onDone: (d: Draft) => void }) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const identify = useServerFn(identifyProduct);
   const [state, setState] = useState<"idle" | "scanning" | "done">("idle");
   const [product, setProduct] = useState<Product>(FIRST);
+  const [guess, setGuess] = useState<VisionGuess | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
 
-  const handleFile = () => {
+  const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
     setState("scanning");
-    setTimeout(() => setState("done"), 1700);
+    setGuess(null);
+    try {
+      const { dataUrl, mimeType } = await downscale(file);
+      setPreview(dataUrl);
+      const result = await identify({ data: { image: dataUrl, mimeType } });
+      setGuess(result);
+      setProduct(result.label || result.category ? buildFromGuess(result) : FIRST);
+    } catch {
+      setGuess(null);
+      setProduct(FIRST);
+    }
+    setState("done");
   };
 
   return (
@@ -210,15 +269,26 @@ function CameraPanel({ onDone }: { onDone: (d: Draft) => void }) {
         onClick={() => inputRef.current?.click()}
         className="tb-tap active:tb-tap-active relative grid h-56 w-full place-items-center overflow-hidden rounded-3xl border border-dashed border-primary/40 bg-card"
       >
+        {preview && (
+          <img
+            src={preview}
+            alt="Captured product"
+            className="absolute inset-0 size-full object-cover opacity-40"
+          />
+        )}
         {state === "scanning" ? (
-          <div className="text-center">
+          <div className="relative text-center">
             <Loader2 className="mx-auto size-7 animate-spin text-primary" />
-            <p className="mt-3 text-xs text-muted-foreground">Reading text and price tag…</p>
+            <p className="mt-3 text-xs text-muted-foreground">
+              AI vision is identifying the product and reading the price tag…
+            </p>
           </div>
         ) : (
-          <div className="text-center">
+          <div className="relative text-center">
             <Camera className="mx-auto size-8 text-primary" />
-            <p className="mt-3 text-sm font-semibold">Open camera</p>
+            <p className="mt-3 text-sm font-semibold">
+              {state === "done" ? "Scan another product" : "Open camera"}
+            </p>
             <p className="mt-1 text-[11px] text-muted-foreground">
               Capture the product or its price tag
             </p>
@@ -229,7 +299,16 @@ function CameraPanel({ onDone }: { onDone: (d: Draft) => void }) {
       {state === "done" && (
         <>
           <div className="mt-4">
-            <SectionTitle>Recognition result — correct it if wrong</SectionTitle>
+            <SectionTitle>
+              {guess?.label
+                ? `Identified: ${guess.label}${
+                    guess.confidence ? ` · ${Math.round(guess.confidence * 100)}% confident` : ""
+                  }`
+                : "Recognition result — correct it if wrong"}
+            </SectionTitle>
+            {guess && !guess.label && (
+              <p className="mb-2 text-[11px] text-wait">{guess.note}</p>
+            )}
             <div className="flex flex-wrap gap-2">
               {DEMO_PRODUCTS.map((p) => (
                 <button
@@ -237,7 +316,7 @@ function CameraPanel({ onDone }: { onDone: (d: Draft) => void }) {
                   onClick={() => setProduct(p)}
                   className={cn(
                     "tb-tap rounded-full border px-3 py-1.5 text-[11px]",
-                    product.id === p.id
+                    product.id === p.id || product.id === "scan-" + p.id
                       ? "border-primary text-primary"
                       : "border-border text-muted-foreground",
                   )}
@@ -249,7 +328,13 @@ function CameraPanel({ onDone }: { onDone: (d: Draft) => void }) {
           </div>
           <Confirm
             product={product}
-            note="Extracted from image · simulated recognition"
+            note={
+              guess?.label
+                ? guess.detectedPrice
+                  ? "AI vision · product and price tag read from your photo"
+                  : "AI vision · product recognised, price from SureShop dataset"
+                : "Matched from SureShop dataset"
+            }
             flags={detectPressure(product.offerText)}
             onConfirm={() => onDone({ product, source: "camera" })}
           />

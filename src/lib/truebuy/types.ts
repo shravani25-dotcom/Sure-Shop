@@ -39,6 +39,8 @@ export interface Product {
   envImpactNew: "Low" | "Medium" | "High";
   emoji: string;
   specs: string[];
+  /** Search aliases used to match links, transcripts and AI vision labels */
+  keywords?: string[] | undefined;
 }
 
 export interface PurchaseContext {
