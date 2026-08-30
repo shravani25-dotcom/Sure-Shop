@@ -91,7 +91,7 @@ function ResultPage() {
           <ArrowLeft className="size-4" /> Home
         </Link>
         <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
-          Confidence {r.confidence}%
+          Confidence {Math.round(r.confidence * 100)}%
         </span>
       </div>
 
@@ -117,7 +117,11 @@ function ResultPage() {
 
       <div className="mt-5 grid grid-cols-2 gap-3">
         <Stat label="Cost per use" value={inr(r.costPerUse)} hint={`${r.expectedUses} uses est.`} />
-        <Stat label="Budget impact" value={`${r.budgetImpactPct}%`} hint="of monthly income" />
+        <Stat
+          label="Budget impact"
+          value={`${Math.min(r.budgetImpactPct, 999)}%`}
+          hint="of monthly discretionary spend"
+        />
         <Stat label="Effective cost" value={inr(r.effectiveCost)} hint="after resale value" />
         <Stat
           label="EMI option"
