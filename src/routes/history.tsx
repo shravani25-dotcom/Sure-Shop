@@ -7,13 +7,13 @@ import { useDecisions } from "@/lib/truebuy/store";
 export const Route = createFileRoute("/history")({
   head: () => ({
     meta: [
-      { title: "Decision history — TRUEBUY" },
+      { title: "Decision history — SureShop" },
       {
         name: "description",
         content:
-          "Every purchase you checked with TRUEBUY, the score it received and how much you saved by not buying.",
+          "Every purchase you checked with SureShop, the score it received and how much you saved by not buying.",
       },
-      { property: "og:title", content: "Decision history — TRUEBUY" },
+      { property: "og:title", content: "Decision history — SureShop" },
       {
         property: "og:description",
         content: "Track your past purchase decisions and total savings in one place.",
@@ -51,7 +51,7 @@ function HistoryPage() {
       {decisions.length === 0 ? (
         <Card className="mt-6 text-center">
           <p className="text-sm text-muted-foreground">
-            No decisions yet. Scan a product and TRUEBUY will keep the reasoning here.
+            No decisions yet. Scan a product and SureShop will keep the reasoning here.
           </p>
           <Link
             to="/scan"

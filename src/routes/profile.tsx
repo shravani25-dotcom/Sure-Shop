@@ -8,16 +8,16 @@ import { usePastPurchases, useProfile } from "@/lib/truebuy/store";
 export const Route = createFileRoute("/profile")({
   head: () => ({
     meta: [
-      { title: "Your profile — TRUEBUY" },
+      { title: "Your profile — SureShop" },
       {
         name: "description",
         content:
-          "Set your monthly income, essentials, savings goal and past purchases so TRUEBUY can judge budget impact accurately.",
+          "Set your monthly income, essentials, savings goal and past purchases so SureShop can judge budget impact accurately.",
       },
-      { property: "og:title", content: "Your profile — TRUEBUY" },
+      { property: "og:title", content: "Your profile — SureShop" },
       {
         property: "og:description",
-        content: "Budget context powers the TRUEBUY score. No bank login, ever.",
+        content: "Budget context powers the SureShop score. No bank login, ever.",
       },
     ],
   }),
@@ -163,7 +163,7 @@ function ProfilePage() {
       </div>
 
       <p className="mt-6 text-center text-[10px] leading-relaxed text-muted-foreground">
-        TRUEBUY never asks for bank logins, OTPs, UPI PINs or card details. Everything you enter
+        SureShop never asks for bank logins, OTPs, UPI PINs or card details. Everything you enter
         stays on this device.
       </p>
     </Screen>

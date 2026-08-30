@@ -28,9 +28,9 @@ export const explainDecision = createServerFn({ method: "POST" })
     try {
       const gateway = createLovableAiGatewayProvider(key);
       const result = await generateText({
-        model: gateway("google/gemini-3.7-flash"),
+        model: gateway("google/gemini-2.5-flash"),
         system:
-          "You are TRUEBUY, an AI purchase-decision engine for Indian consumers. " +
+          "You are SureShop, an AI purchase-decision engine for Indian consumers. " +
           "You receive a structured decision from a deterministic scoring engine. " +
           "Rewrite it as a calm, neutral 2-3 sentence explanation in Indian English. " +
           "Use ONLY the numbers and facts given to you — never invent prices, specs, discounts or dates. " +

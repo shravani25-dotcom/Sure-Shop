@@ -11,16 +11,16 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/context")({
   head: () => ({
     meta: [
-      { title: "Your context — TRUEBUY" },
+      { title: "Your context — SureShop" },
       {
         name: "description",
         content:
-          "Tell TRUEBUY why you need the product and how often you'll use it. Context is what turns a price into a decision.",
+          "Tell SureShop why you need the product and how often you'll use it. Context is what turns a price into a decision.",
       },
-      { property: "og:title", content: "Your context — TRUEBUY" },
+      { property: "og:title", content: "Your context — SureShop" },
       {
         property: "og:description",
-        content: "Purpose, usage frequency and urgency feed the TRUEBUY decision engine.",
+        content: "Purpose, usage frequency and urgency feed the SureShop decision engine.",
       },
     ],
   }),
@@ -189,7 +189,7 @@ function ContextPage() {
         onClick={run}
         className="tb-tap active:tb-tap-active mt-7 flex w-full items-center justify-center gap-2 rounded-2xl bg-primary py-4 font-display text-base font-bold text-primary-foreground"
       >
-        Get my TRUEBUY decision <ArrowRight className="size-4" />
+        Get my SureShop decision <ArrowRight className="size-4" />
       </button>
       <p className="mt-3 text-center text-[10px] text-muted-foreground">
         No bank login, OTP, UPI PIN or card details — ever.

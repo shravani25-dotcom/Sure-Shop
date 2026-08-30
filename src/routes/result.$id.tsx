@@ -18,13 +18,13 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/result/$id")({
   head: () => ({
     meta: [
-      { title: "Your decision — TRUEBUY" },
+      { title: "Your decision — SureShop" },
       {
         name: "description",
         content:
-          "A transparent 0-100 TRUEBUY score with the eight factors behind it, smarter alternatives and the money you save.",
+          "A transparent 0-100 SureShop score with the eight factors behind it, smarter alternatives and the money you save.",
       },
-      { property: "og:title", content: "Your TRUEBUY decision" },
+      { property: "og:title", content: "Your SureShop decision" },
       {
         property: "og:description",
         content: "See the score, the reasoning and the alternatives before you spend.",
@@ -91,7 +91,7 @@ function ResultPage() {
           <ArrowLeft className="size-4" /> Home
         </Link>
         <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
-          Confidence {r.confidence}%
+          Confidence {Math.round(r.confidence * 100)}%
         </span>
       </div>
 
@@ -117,7 +117,11 @@ function ResultPage() {
 
       <div className="mt-5 grid grid-cols-2 gap-3">
         <Stat label="Cost per use" value={inr(r.costPerUse)} hint={`${r.expectedUses} uses est.`} />
-        <Stat label="Budget impact" value={`${r.budgetImpactPct}%`} hint="of monthly income" />
+        <Stat
+          label="Budget impact"
+          value={`${Math.min(r.budgetImpactPct, 999)}%`}
+          hint="of monthly discretionary spend"
+        />
         <Stat label="Effective cost" value={inr(r.effectiveCost)} hint="after resale value" />
         <Stat
           label="EMI option"
